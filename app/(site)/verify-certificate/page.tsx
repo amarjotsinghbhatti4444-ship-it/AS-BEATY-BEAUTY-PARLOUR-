@@ -1,11 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, CheckCircle2, XCircle, Loader2, Award } from 'lucide-react';
+import { Certificate, getCertificatesFromStorage } from '@/lib/certificates';
 
 export default function VerifyCertificatePage() {
   const [mobileNumber, setMobileNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<null | 'valid' | 'invalid'>(null);
+  const [foundCert, setFoundCert] = useState<Certificate | null>(null);
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,12 +15,17 @@ export default function VerifyCertificatePage() {
     
     setIsLoading(true);
     setResult(null);
+    setFoundCert(null);
 
-    // Mock API call
+    // Mock API call to local storage
     setTimeout(() => {
-      // For demo, anything >= 8 characters is valid
-      if (mobileNumber.length >= 8) {
+      const certs = getCertificatesFromStorage();
+      // Look up by mobile number
+      const match = certs.find(c => c.phoneNumber === mobileNumber);
+      
+      if (match) {
         setResult('valid');
+        setFoundCert(match);
       } else {
         setResult('invalid');
       }
@@ -64,7 +71,7 @@ export default function VerifyCertificatePage() {
           </form>
 
           {/* Result Section */}
-          {result === 'valid' && (
+          {result === 'valid' && foundCert && (
             <div className="p-6 bg-green-50 rounded-2xl border border-green-100 flex gap-4 animate-in fade-in slide-in-from-bottom-4">
               <CheckCircle2 className="text-green-600 shrink-0" size={28} />
               <div>
@@ -72,19 +79,19 @@ export default function VerifyCertificatePage() {
                 <div className="space-y-2 text-sm text-green-800">
                   <div className="grid grid-cols-3 gap-2 border-b border-green-200/50 pb-2">
                     <span className="font-medium opacity-70">Student Name</span>
-                    <span className="col-span-2 font-bold">Jane Doe</span>
+                    <span className="col-span-2 font-bold">{foundCert.studentName}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 border-b border-green-200/50 pb-2">
                     <span className="font-medium opacity-70">Course</span>
-                    <span className="col-span-2 font-bold">Professional Makeup Masterclass</span>
+                    <span className="col-span-2 font-bold">{foundCert.course}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 border-b border-green-200/50 pb-2">
                     <span className="font-medium opacity-70">Completion</span>
-                    <span className="col-span-2 font-bold">November 2023</span>
+                    <span className="col-span-2 font-bold">{foundCert.date}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 pt-1">
-                    <span className="font-medium opacity-70">Mobile No.</span>
-                    <span className="col-span-2 font-bold uppercase">{mobileNumber}</span>
+                    <span className="font-medium opacity-70">Cert No.</span>
+                    <span className="col-span-2 font-bold uppercase">{foundCert.certNumber}</span>
                   </div>
                 </div>
               </div>
