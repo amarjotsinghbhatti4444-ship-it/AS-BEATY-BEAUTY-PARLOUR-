@@ -3,21 +3,21 @@ import { useState } from 'react';
 import { Search, CheckCircle2, XCircle, Loader2, Award } from 'lucide-react';
 
 export default function VerifyCertificatePage() {
-  const [certId, setCertId] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<null | 'valid' | 'invalid'>(null);
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!certId.trim()) return;
+    if (!mobileNumber.trim()) return;
     
     setIsLoading(true);
     setResult(null);
 
     // Mock API call
     setTimeout(() => {
-      // For demo, anything starting with 'ASB' is valid
-      if (certId.toUpperCase().startsWith('ASB')) {
+      // For demo, anything >= 8 characters is valid
+      if (mobileNumber.length >= 8) {
         setResult('valid');
       } else {
         setResult('invalid');
@@ -35,24 +35,24 @@ export default function VerifyCertificatePage() {
                 <Award size={32} />
              </div>
              <h1 className="font-playfair text-3xl md:text-4xl font-bold text-charcoal mb-4">Certificate Verification</h1>
-             <p className="text-gray-600">Enter the certificate number to verify the authenticity of an AS Beauty Academy credential.</p>
+             <p className="text-gray-600">Enter the registered mobile number to verify the authenticity of an AS Beauty Academy credential.</p>
           </div>
 
           <form onSubmit={handleVerify} className="mb-8">
              <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 <input 
-                  type="text" 
-                  value={certId}
-                  onChange={(e) => setCertId(e.target.value)}
-                  placeholder="Enter Certificate Number (e.g. ASB1001)"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rosegold focus:border-transparent transition-all uppercase"
+                  type="tel" 
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  placeholder="Enter Mobile Number (e.g. +1 234 567 8900)"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rosegold focus:border-transparent transition-all"
                   required
                 />
              </div>
              <button 
                type="submit" 
-               disabled={isLoading || !certId.trim()}
+               disabled={isLoading || !mobileNumber.trim()}
                className="w-full mt-4 py-4 bg-charcoal text-white rounded-xl font-medium hover:bg-rosegold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
              >
                {isLoading ? (
@@ -83,8 +83,8 @@ export default function VerifyCertificatePage() {
                     <span className="col-span-2 font-bold">November 2023</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 pt-1">
-                    <span className="font-medium opacity-70">Cert No.</span>
-                    <span className="col-span-2 font-bold uppercase">{certId}</span>
+                    <span className="font-medium opacity-70">Mobile No.</span>
+                    <span className="col-span-2 font-bold uppercase">{mobileNumber}</span>
                   </div>
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function VerifyCertificatePage() {
               <XCircle className="text-red-600 shrink-0" size={28} />
               <div>
                 <h4 className="text-red-900 font-bold mb-1">Record Not Found</h4>
-                <p className="text-red-700 text-sm">We couldn&apos;t find a matching certificate for &quot;{certId.toUpperCase()}&quot;. Please check the number and try again, or contact administration.</p>
+                <p className="text-red-700 text-sm">We couldn&apos;t find a matching certificate for &quot;{mobileNumber}&quot;. Please check the number and try again, or contact administration.</p>
               </div>
             </div>
           )}
