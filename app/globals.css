@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rosegold: #b76e79;
+  --color-rosegold-light: #d8a1a8;
+  --color-rosegold-dark: #965a63;
+  --color-softpink: #fdf2f4;
+  --color-charcoal: #1c1c1c;
+}
+
+@layer base {
+  body {
+    @apply bg-softpink text-charcoal bg-white; /* Add bg-white as base, we'll use softpink as accents or sections */
+  }
+}

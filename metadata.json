@@ -1,0 +1,6 @@
+{
+  "name": "AS Beauty Salon and Academy",
+  "description": "A modern, premium beauty salon and academy website featuring services, courses, gallery, contact, and certificate verification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
